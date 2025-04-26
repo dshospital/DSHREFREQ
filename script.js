@@ -1,5 +1,5 @@
 const SUPABASE_URL = 'https://ihizxyafsdvxivkyquev.supabase.co'; // رابط مشروعك
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_PUBLIC_KEY'; // المفتاح العام
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloaXp4eWFmc2R2eGl2a3lxdWV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2NTcxMDMsImV4cCI6MjA2MTIzMzEwM30.BFtLt4I6JnRzAmHf5reEaDL1h-f-nMBIsSQUfC5M5Zo'; // المفتاح العام
 
 function showModal(message, type = 'success') {
   const modal = document.createElement('div');
