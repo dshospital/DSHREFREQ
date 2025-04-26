@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة التحويل الرقمي</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <h2>بوابة التحويل الرقمي - مستشفى دار الشفاء</h2>
+  <form id="referralForm">
+    <label>الاسم</label>
+    <input type="text" name="patient_name" required>
+    <label>رقم الجوال</label>
+    <input type="tel" name="patient_phone" required>
+    <label>رقم الهوية</label>
+    <input type="text" name="patient_id" required>
+    <label>سبب التحويل</label>
+    <textarea name="referral_reason" required></textarea>
+    <label>اسم الطبيب</label>
+    <input type="text" name="doctor_name" required>
+    <label>التخصص</label>
+    <input type="text" name="specialty" required>
+    <label>رقم الجوال للمجمع الطبي</label>
+    <input type="tel" name="clinic_phone" required>
+    <label>ملاحظات</label>
+    <textarea name="notes"></textarea>
+    <div class="file-upload">
+      <label>إرفاق وثائق متعددة</label>
+      <input type="file" name="documents" multiple accept="image/*,.pdf,.doc,.docx">
+    </div>
+    <button type="submit">إرسال</button>
+  </form>
+  <div class="success-message" id="successMessage" style="display:none;">
+    ✅ تم الإرسال بنجاح!
+    <div id="fileLinks"></div>
+  </div>
+</div>
+
+<div id="loadingOverlay" style="display:none;">
+  <div class="loader"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

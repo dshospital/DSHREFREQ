@@ -1,0 +1,89 @@
+
+const SUPABASE_URL = 'https://ihizxyafsdvxivkyquev.supabase.co'; // رابط مشروعك
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_PUBLIC_KEY'; // المفتاح العام
+
+function showModal(message, type = 'success') {
+  const modal = document.createElement('div');
+  modal.style.position = 'fixed';
+  modal.style.top = '50%';
+  modal.style.left = '50%';
+  modal.style.transform = 'translate(-50%, -50%)';
+  modal.style.backgroundColor = type === 'success' ? '#d4edda' : '#f8d7da';
+  modal.style.color = type === 'success' ? '#155724' : '#721c24';
+  modal.style.padding = '20px';
+  modal.style.borderRadius = '8px';
+  modal.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+  modal.style.zIndex = '1001';
+  modal.innerText = message;
+  document.body.appendChild(modal);
+  setTimeout(() => { modal.remove(); }, 3000);
+}
+
+async function uploadFile(file) {
+  const filePath = `referral-documents/${Date.now()}-${file.name}`;
+  const response = await fetch(`${SUPABASE_URL}/storage/v1/object/referral-documents/${Date.now()}-${file.name}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': file.type,
+      'Cache-Control': 'max-age=3600'
+    },
+    body: file
+  });
+  if (!response.ok) throw new Error('خطأ أثناء رفع الملف إلى التخزين');
+  return `${SUPABASE_URL}/storage/v1/object/public/${filePath}`;
+}
+
+document.getElementById('referralForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const form = this;
+  const fileInput = form.querySelector('input[name="documents"]');
+  let uploadedFiles = [];
+
+  document.getElementById('loadingOverlay').style.display = 'flex';
+
+  try {
+    if (fileInput && fileInput.files.length > 0) {
+      for (const file of fileInput.files) {
+        const fileUrl = await uploadFile(file);
+        uploadedFiles.push(fileUrl);
+      }
+    }
+
+    const formData = {
+      patient_name: form.patient_name.value,
+      patient_phone: form.patient_phone.value,
+      patient_id: form.patient_id.value,
+      referral_reason: form.referral_reason.value,
+      doctor_name: form.doctor_name.value,
+      specialty: form.specialty.value,
+      clinic_phone: form.clinic_phone.value,
+      notes: form.notes.value,
+      uploaded_files: uploadedFiles
+    };
+
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/referrals`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(formData)
+    });
+
+    if (!response.ok) throw new Error('فشل في حفظ البيانات');
+
+    form.reset();
+    document.getElementById('successMessage').style.display = 'block';
+    document.getElementById('fileLinks').innerHTML = uploadedFiles.map(url => `<a href="${url}" target="_blank">📎 ملف مرفق</a>`).join('<br>');
+    showModal('✅ تم إرسال البيانات بنجاح!');
+    
+  } catch (error) {
+    showModal('❌ حدث خطأ أثناء الإرسال: ' + error.message, 'error');
+  } finally {
+    document.getElementById('loadingOverlay').style.display = 'none';
+  }
+});
