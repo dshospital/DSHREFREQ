@@ -1,6 +1,5 @@
-
 const SUPABASE_URL = 'https://ihizxyafsdvxivkyquev.supabase.co'; // رابط مشروعك
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloaXp4eWFmc2R2eGl2a3lxdWV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2NTcxMDMsImV4cCI6MjA2MTIzMzEwM30.BFtLt4I6JnRzAmHf5reEaDL1h-f-nMBIsSQUfC5M5Zo'; // المفتاح العام
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_PUBLIC_KEY'; // المفتاح العام
 
 function showModal(message, type = 'success') {
   const modal = document.createElement('div');
@@ -41,7 +40,7 @@ document.getElementById('referralForm').addEventListener('submit', async functio
   const fileInput = form.querySelector('input[name="documents"]');
   let uploadedFiles = [];
 
-  document.getElementById('loadingOverlay').style.display = 'flex';
+  document.getElementById('loadingOverlay')?.style && (document.getElementById('loadingOverlay').style.display = 'flex');
 
   try {
     if (fileInput && fileInput.files.length > 0) {
@@ -74,16 +73,21 @@ document.getElementById('referralForm').addEventListener('submit', async functio
       body: JSON.stringify(formData)
     });
 
-    if (!response.ok) throw new Error('فشل في حفظ البيانات');
+    const result = await response.text();
+    console.log("📡 رد Supabase:", result);
+
+    if (!response.ok) throw new Error('فشل في حفظ البيانات. الرد: ' + result);
 
     form.reset();
     document.getElementById('successMessage').style.display = 'block';
     document.getElementById('fileLinks').innerHTML = uploadedFiles.map(url => `<a href="${url}" target="_blank">📎 ملف مرفق</a>`).join('<br>');
     showModal('✅ تم إرسال البيانات بنجاح!');
-    
+
   } catch (error) {
+    console.error("❌ خطأ أثناء الإرسال:", error);
     showModal('❌ حدث خطأ أثناء الإرسال: ' + error.message, 'error');
   } finally {
-    document.getElementById('loadingOverlay').style.display = 'none';
+    const loadingDiv = document.getElementById('loadingOverlay');
+    if (loadingDiv) loadingDiv.style.display = 'none';
   }
 });
