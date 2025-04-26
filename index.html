@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة تسجيل الإحالات - مستشفى دار الشفاء</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div class="container">
+  <h2>بوابة تسجيل الإحالات - مستشفى دار الشفاء</h2>
+
+  <form id="referralForm">
+    <h3>بيانات المريض</h3>
+
+    <label>اسم المريض</label>
+    <input type="text" name="patient_name" required>
+
+    <label>رقم جوال المريض</label>
+    <input type="tel" name="patient_phone" required>
+
+    <label>رقم هوية المريض</label>
+    <input type="text" name="patient_id_number" required>
+
+    <h3>بيانات الطبيب والمجمع الطبي</h3>
+
+    <label>اسم الطبيب</label>
+    <input type="text" name="doctor_name" required>
+
+    <label>التخصص</label>
+    <input type="text" name="specialty" required>
+
+    <label>كود المجمع الطبي</label>
+    <input type="text" name="clinic_code" required>
+
+    <h3>تفاصيل التحويل</h3>
+
+    <label>سبب التحويل</label>
+    <textarea name="referral_reason" rows="3" required></textarea>
+
+    <label>ملاحظات إضافية</label>
+    <textarea name="notes" rows="3"></textarea>
+
+    <h3>رفع وثائق</h3>
+
+    <input type="file" name="documents" multiple accept="image/*,.pdf,.doc,.docx">
+
+    <button type="submit">إرسال الإحالة</button>
+  </form>
+
+  <div id="successMessage" style="display:none; margin-top:20px; background:#e0ffe0; padding:10px; border-radius:8px;">
+    ✅ تم إرسال الإحالة بنجاح!
+    <div id="fileLinks"></div>
+  </div>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -8,25 +7,27 @@
   <link rel="stylesheet" href="login.css">
 </head>
 <body>
-<div class="login-container">
-  <img src="logo.jpg" alt="شعار مستشفى دار الشفاء" class="logo">
-  <h1>بوابة التحويل الرقمي</h1>
-  <h2>- مستشفى دار الشفاء -</h2>
-  <h3>نافذة الإحالات</h3>
-  <div class="form-group">
-    <input type="password" id="passwordInput" placeholder="🔒 أدخل كلمة المرور" required>
-    <button onclick="checkPassword()">دخول</button>
+  <div class="login-container">
+    <img src="logo.jpg" alt="شعار مستشفى دار الشفاء" class="logo">
+    <h1>بوابة التحويل الرقمي</h1>
+    <h2>- مستشفى دار الشفاء -</h2>
+    <h3>نافذة الإحالات</h3>
+
+    <div class="form-group">
+      <input type="password" id="passwordInput" placeholder="🔒 أدخل كلمة المرور" required>
+      <button onclick="checkPassword()">دخول</button>
+    </div>
   </div>
-</div>
+
 <script>
-  function checkPassword() {
-    const password = document.getElementById('passwordInput').value;
-    if (password === "DSH@2024") {
-      window.location.href = "index.html";
-    } else {
-      alert("❌ كلمة المرور غير صحيحة!");
-    }
+function checkPassword() {
+  const password = document.getElementById('passwordInput').value;
+  if (password === "DSH@2024") {
+    window.location.href = "index.html";
+  } else {
+    alert("❌ كلمة المرور غير صحيحة!");
   }
+}
 </script>
 </body>
 </html>
