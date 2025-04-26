@@ -1,3 +1,4 @@
+
 const SUPABASE_URL = 'https://ihizxyafsdvxivkyquev.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloaXp4eWFmc2R2eGl2a3lxdWV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2NTcxMDMsImV4cCI6MjA2MTIzMzEwM30.BFtLt4I6JnRzAmHf5reEaDL1h-f-nMBIsSQUfC5M5Zo';
 
@@ -19,8 +20,9 @@ function showModal(message, type = 'success') {
 }
 
 async function uploadFile(file) {
-  const filePath = `referral-documents/${Date.now()}-${file.name}`;
-  const response = await fetch(`${SUPABASE_URL}/storage/v1/object/referral-documents/${Date.now()}-${file.name}`, {
+  const timestamp = Date.now();
+  const filePath = `referral-documents/${timestamp}-${file.name}`;
+  const response = await fetch(`${SUPABASE_URL}/storage/v1/object/${filePath}`, {
     method: 'POST',
     headers: {
       'apikey': SUPABASE_KEY,
@@ -40,7 +42,8 @@ document.getElementById('referralForm').addEventListener('submit', async functio
   const fileInput = form.querySelector('input[name="documents"]');
   let uploadedFiles = [];
 
-  document.getElementById('loadingOverlay')?.style && (document.getElementById('loadingOverlay').style.display = 'flex');
+  const loadingDiv = document.getElementById('loadingOverlay');
+  if (loadingDiv) loadingDiv.style.display = 'flex';
 
   try {
     if (fileInput && fileInput.files.length > 0) {
@@ -82,12 +85,11 @@ document.getElementById('referralForm').addEventListener('submit', async functio
     document.getElementById('successMessage').style.display = 'block';
     document.getElementById('fileLinks').innerHTML = uploadedFiles.map(url => `<a href="${url}" target="_blank">📎 ملف مرفق</a>`).join('<br>');
     showModal('✅ تم إرسال البيانات بنجاح!');
-    
+
   } catch (error) {
     console.error("❌ خطأ أثناء الإرسال:", error);
     showModal('❌ حدث خطأ أثناء الإرسال: ' + error.message, 'error');
   } finally {
-    const loadingDiv = document.getElementById('loadingOverlay');
     if (loadingDiv) loadingDiv.style.display = 'none';
   }
 });
