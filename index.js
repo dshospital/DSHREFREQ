@@ -30,19 +30,6 @@ async function uploadFile(file) {
   return publicUrl;
 }
 
-// توليد كود الطبيب تلقائياً
-async function generateDoctorCode() {
-  const { data, error } = await client
-    .from('doctors')
-    .select('id', { count: 'exact' });
-
-  if (error) throw error;
-
-  const nextNumber = (data.length || 0) + 1;
-  const paddedNumber = String(nextNumber).padStart(5, '0');
-  return `DOC-${paddedNumber}`;
-}
-
 // إرسال النموذج
 document.getElementById('referralForm').addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -51,14 +38,13 @@ document.getElementById('referralForm').addEventListener('submit', async functio
   let uploadedFiles = [];
 
   try {
-    if (fileInput.files.length > 0) {
+    // رفع الملفات
+    if (fileInput && fileInput.files.length > 0) {
       for (const file of fileInput.files) {
         const url = await uploadFile(file);
         uploadedFiles.push(url);
       }
     }
-
-    const doctorCode = await generateDoctorCode();
 
     // حفظ بيانات المريض
     const { data: patientData, error: patientError } = await client
@@ -77,19 +63,19 @@ document.getElementById('referralForm').addEventListener('submit', async functio
     if (patientError) throw patientError;
     const patient_id = patientData.id;
 
-    // حفظ بيانات الطبيب
-    const { data: doctorData, error: doctorError } = await client
+    // الحصول على doctor_code الذي أدخله المستخدم
+    const doctorCodeFromForm = form.doctor_code.value;
+
+    // البحث عن الطبيب بناءً على الكود
+    const { data: doctorData, error: doctorFetchError } = await client
       .from('doctors')
-      .insert([
-        {
-          doctor_code: doctorCode,
-          clinic_code: form.clinic_code.value
-        }
-      ])
-      .select()
+      .select('*')
+      .eq('doctor_code', doctorCodeFromForm)
       .single();
 
-    if (doctorError) throw doctorError;
+    if (doctorFetchError) {
+      throw new Error('❌ لم يتم العثور على الطبيب بهذا الكود');
+    }
     const doctor_id = doctorData.id;
 
     // حفظ بيانات الإحالة
@@ -121,6 +107,7 @@ document.getElementById('referralForm').addEventListener('submit', async functio
         ]);
     }
 
+    // إعادة ضبط النموذج وعرض رسالة النجاح
     form.reset();
     document.getElementById('successMessage').style.display = 'block';
     document.getElementById('fileLinks').innerHTML = uploadedFiles.map(link => `<a href="${link}" target="_blank">📎 ملف مرفق</a>`).join('<br>');
