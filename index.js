@@ -1,10 +1,10 @@
-// تهيئة الاتصال مع Supabase
-const client = supabase.createClient(
+// إنشاء اتصال مع Supabase عبر window.supabase
+const client = window.supabase.createClient(
   'https://ihizxyafsdvxivkyquev.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwc3hka2R1dHhwc3J5YXdtc3lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2NTA3ODMsImV4cCI6MjA2MTIyNjc4M30.jutNA8Zo0RxzpBWEXQm5-OPraFNtWFKZe6yZ__d_2Ts'
 );
 
-// دالة رفع الملف إلى Supabase Storage
+// رفع ملف إلى bucket referral-documents
 async function uploadFile(file) {
   const filePath = `${Date.now()}-${file.name}`;
 
@@ -26,18 +26,19 @@ async function uploadFile(file) {
   return publicUrl;
 }
 
-// دالة توليد كود للطبيب
+// توليد كود طبيب
 async function generateDoctorCode() {
-  const res = await client
+  const { data, error } = await client
     .from('doctors')
     .select('id');
 
-  const doctors = res.data;
-  const nextNumber = 1000 + doctors.length + 1;
+  if (error) throw error;
+
+  const nextNumber = 1000 + (data?.length || 0) + 1;
   return `DOC-${nextNumber}`;
 }
 
-// التعامل مع إرسال النموذج
+// معالجة إرسال النموذج
 document.getElementById('referralForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const form = this;
@@ -45,7 +46,7 @@ document.getElementById('referralForm').addEventListener('submit', async functio
   let uploadedFiles = [];
 
   try {
-    // رفع الملفات إذا كانت موجودة
+    // رفع الملفات
     if (fileInput.files.length > 0) {
       for (const file of fileInput.files) {
         const url = await uploadFile(file);
@@ -53,11 +54,11 @@ document.getElementById('referralForm').addEventListener('submit', async functio
       }
     }
 
-    // إنشاء كود للطبيب
+    // توليد كود الطبيب
     const doctorCode = await generateDoctorCode();
 
-    // إرسال بيانات المريض
-    const { data: newPatientData, error: patientError } = await client
+    // إضافة بيانات المريض
+    const { data: patientData, error: patientError } = await client
       .from('patients')
       .insert([
         {
@@ -70,10 +71,10 @@ document.getElementById('referralForm').addEventListener('submit', async functio
       .single();
 
     if (patientError) throw patientError;
-    const patient_id = newPatientData.id;
+    const patient_id = patientData.id;
 
-    // إرسال بيانات الطبيب
-    const { data: newDoctorData, error: doctorError } = await client
+    // إضافة بيانات الطبيب
+    const { data: doctorData, error: doctorError } = await client
       .from('doctors')
       .insert([
         {
@@ -87,10 +88,10 @@ document.getElementById('referralForm').addEventListener('submit', async functio
       .single();
 
     if (doctorError) throw doctorError;
-    const doctor_id = newDoctorData.id;
+    const doctor_id = doctorData.id;
 
-    // إرسال بيانات الإحالة
-    const { data: newReferralData, error: referralError } = await client
+    // إضافة بيانات الإحالة
+    const { data: referralData, error: referralError } = await client
       .from('referrals')
       .insert([
         {
@@ -104,9 +105,9 @@ document.getElementById('referralForm').addEventListener('submit', async functio
       .single();
 
     if (referralError) throw referralError;
-    const referral_id = newReferralData.id;
+    const referral_id = referralData.id;
 
-    // ربط الملفات بالإحالة
+    // إضافة الملفات المرفقة
     for (const url of uploadedFiles) {
       await client
         .from('files')
