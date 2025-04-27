@@ -1,22 +1,17 @@
 body {
-  margin: 0;
-  padding: 0;
   font-family: 'Arial', sans-serif;
-  background: #F8FAFC;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  padding-top: 40px;
+  background-color: #f8fafc;
+  margin: 0;
+  padding: 20px;
 }
 
 .container {
+  max-width: 600px;
+  margin: auto;
   background: white;
-  padding: 30px;
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  width: 90%;
-  max-width: 600px;
 }
 
 h2 {
@@ -25,28 +20,19 @@ h2 {
   margin-bottom: 20px;
 }
 
-h3 {
-  margin-top: 30px;
-  color: #333;
-  font-size: 1.2rem;
-}
-
-label {
+form label {
   display: block;
-  margin-top: 15px;
+  margin: 15px 0 5px;
   font-weight: bold;
 }
 
-input, textarea, button {
+form input, form textarea, form select {
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
-}
-
-input, textarea {
-  border: 1px solid #ccc;
 }
 
 textarea {
@@ -56,8 +42,11 @@ textarea {
 button {
   background-color: #007b8f;
   color: white;
+  padding: 12px;
+  width: 100%;
   border: none;
-  margin-top: 20px;
+  border-radius: 8px;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -66,10 +55,22 @@ button:hover {
   background-color: #005f6a;
 }
 
-#successMessage {
+.success-message {
+  background-color: #e7f9e7;
+  border: 1px solid #b2e0b2;
+  color: #2e7d32;
+  padding: 10px;
+  border-radius: 8px;
   text-align: center;
-  background: #d1ffd6;
-  border: 1px solid #a5f0b2;
-  color: #2d7a3e;
-  margin-top: 20px;
+  font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 15px;
+  }
+
+  button {
+    font-size: 1rem;
+  }
 }
