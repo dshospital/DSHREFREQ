@@ -14,6 +14,7 @@ document.getElementById('doctorForm').addEventListener('submit', async function(
       .from('doctors')
       .insert([
         {
+          doctor_name: form.doctor_name.value,
           doctor_code: form.doctor_code.value,
           clinic_code: form.clinic_code.value,
           specialty: form.specialty.value
