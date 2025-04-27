@@ -1,48 +1,67 @@
-const SUPABASE_URL = 'https://ihizxyafsdvxivkyquev.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwc3hka2R1dHhwc3J5YXdtc3lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2NTA3ODMsImV4cCI6MjA2MTIyNjc4M30.jutNA8Zo0RxzpBWEXQm5-OPraFNtWFKZe6yZ__d_2Ts'; // 🔴 ضع مفتاح مشروعك هنا
+// ربط Supabase
+const client = window.supabase.createClient(
+  'https://ihizxyafsdvxivkyquev.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloaXp4eWFmc2R2eGl2a3lxdWV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2NTcxMDMsImV4cCI6MjA2MTIzMzEwM30.BFtLt4I6JnRzAmHf5reEaDL1h-f-nMBIsSQUfC5M5Zo'
+);
 
-async function fetchReferrals() {
-  const response = await fetch(`${SUPABASE_URL}/rest/v1/referrals?select=*,patients(*),doctors(*),files(*)`, {
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`
-    }
-  });
+// تحميل بيانات الإحالات وعرضها
+async function loadReferrals() {
+  const { data: referrals, error } = await client
+    .from('referrals')
+    .select(`
+      id,
+      created_at,
+      referral_reason,
+      notes,
+      patients (
+        full_name,
+        national_id,
+        phone_number,
+        gender
+      ),
+      doctors (
+        doctor_code,
+        clinic_code
+      ),
+      files (
+        file_url
+      )
+    `)
+    .order('created_at', { ascending: false });
 
-  const referrals = await response.json();
-  populateTable(referrals);
-}
+  if (error) {
+    console.error('❌ خطأ أثناء تحميل البيانات:', error);
+    return;
+  }
 
-function populateTable(referrals) {
-  const tbody = document.querySelector('#referralsTable tbody');
-  tbody.innerHTML = '';
+  const tableBody = document.getElementById('referralTableBody');
+  tableBody.innerHTML = '';
 
   referrals.forEach(referral => {
     const tr = document.createElement('tr');
 
     tr.innerHTML = `
-      <td>${referral.patients?.patient_name || ''}</td>
-      <td>${referral.patients?.patient_id_number || ''}</td>
-      <td>${referral.doctors?.doctor_name || ''}</td>
-      <td>${referral.doctors?.specialty || ''}</td>
-      <td>${referral.referral_reason || ''}</td>
-      <td>${new Date(referral.created_at).toLocaleDateString()}</td>
+      <td>${referral.patients?.full_name || '-'}</td>
+      <td>${referral.patients?.national_id || '-'}</td>
+      <td>${referral.patients?.phone_number || '-'}</td>
+      <td>${referral.patients?.gender || '-'}</td>
+      <td>${referral.doctors?.doctor_code || '-'}</td>
+      <td>${referral.doctors?.clinic_code || '-'}</td>
+      <td>${referral.referral_reason || '-'}</td>
+      <td>${referral.notes || '-'}</td>
       <td>
-        ${referral.files?.map(file => `<a href="${file.file_url}" target="_blank">📄 فتح</a>`).join('<br>') || ''}
+        ${
+          referral.files?.length
+            ? referral.files.map(file => `<a href="${file.file_url}" target="_blank">📎</a>`).join(' ')
+            : 'لا يوجد ملفات'
+        }
       </td>
+      <td>${new Date(referral.created_at).toLocaleString()}</td>
     `;
-    tbody.appendChild(tr);
+
+    tableBody.appendChild(tr);
   });
 }
 
-document.getElementById('searchInput').addEventListener('input', function() {
-  const search = this.value.toLowerCase();
-  const rows = document.querySelectorAll('#referralsTable tbody tr');
-  rows.forEach(row => {
-    const text = row.innerText.toLowerCase();
-    row.style.display = text.includes(search) ? '' : 'none';
-  });
-});
-
-// استدعاء تحميل البيانات عند تشغيل الصفحة
-fetchReferrals();
+// تحميل البيانات عند فتح الصفحة
+document.addEventListener('DOMContentLoaded', loadReferrals);
