@@ -1,4 +1,16 @@
-<form id="referralForm">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>بوابة التحويل الرقمي - مستشفى دار الشفاء</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <h2>نموذج إحالة مريض - مستشفى دار الشفاء</h2>
+
+   <form id="referralForm">
 
   <label>اسم المريض</label>
   <input type="text" name="patient_name" required>
@@ -34,3 +46,17 @@
   <button type="submit">إرسال الإحالة</button>
 
 </form>
+
+
+    <div class="success-message" id="successMessage" style="display:none; margin-top: 20px; background-color: #e7f9e7; padding: 15px; border-radius: 8px;">
+      ✅ تم الإرسال بنجاح!
+      <div id="fileLinks" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <!-- ربط مكتبة Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <!-- ربط كود الإرسال -->
+  <script src="index.js"></script>
+</body>
+</html>
