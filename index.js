@@ -6,6 +6,7 @@ const client = window.supabase.createClient(
 
 // رفع ملف إلى Bucket مع دعم Cache و Upsert
 async function uploadFile(file) {
+  // تنظيف اسم الملف
   const cleanFileName = file.name.replace(/\s+/g, '-').replace(/[^\w.-]/g, '');
   const filePath = `uploads/${Date.now()}-${cleanFileName}`;
 
@@ -14,7 +15,7 @@ async function uploadFile(file) {
     .from('referral-documents')
     .upload(filePath, file, {
       cacheControl: '3600',
-      upsert: false
+      upsert: true
     });
 
   if (error) {
