@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إدارة أكواد الأطباء</title>
+  <link rel="stylesheet" href="manage-doctors.css">
+</head>
+<body>
+  <div class="container">
+    <h2>إدارة أكواد الأطباء - مستشفى دار الشفاء</h2>
+
+    <form id="doctorForm">
+      <label>كود الطبيب</label>
+      <input type="text" name="doctor_code" required placeholder="مثال: DOC-00001">
+
+      <label>كود المجمع الطبي</label>
+      <input type="text" name="clinic_code" required>
+
+      <button type="submit">إضافة طبيب</button>
+    </form>
+
+    <div class="success-message" id="successMessage" style="display:none; margin-top: 20px;">
+      ✅ تم إضافة الطبيب بنجاح
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="manage-doctors.js"></script>
+</body>
+</html>
