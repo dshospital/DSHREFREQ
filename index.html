@@ -1,56 +1,36 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>بوابة التحويل الرقمي - مستشفى دار الشفاء</title>
-  <link rel="stylesheet" href="index.css">
-</head>
-<body>
-  <div class="container">
-    <h2>نموذج إحالة مريض - مستشفى دار الشفاء</h2>
+<form id="referralForm">
 
-    <form id="referralForm">
-      <label>اسم المريض</label>
-      <input type="text" name="patient_name" required>
+  <label>اسم المريض</label>
+  <input type="text" name="patient_name" required>
 
-      <label>رقم الهوية</label>
-      <input type="text" name="patient_id" required>
+  <label>رقم الهوية</label>
+  <input type="text" name="patient_id" required>
 
-      <label>رقم الجوال</label>
-      <input type="tel" name="patient_phone" required>
+  <label>رقم الجوال</label>
+  <input type="tel" name="patient_phone" required>
 
-      <label>النوع</label>
-      <select name="gender" required>
-        <option value="">اختر النوع</option>
-        <option value="ذكر">ذكر</option>
-        <option value="أنثى">أنثى</option>
-      </select>
+  <label>النوع</label>
+  <select name="gender" required>
+    <option value="">اختر النوع</option>
+    <option value="ذكر">ذكر</option>
+    <option value="أنثى">أنثى</option>
+  </select>
 
-      <label>كود المجمع الطبي</label>
-      <input type="text" name="clinic_code" required>
+  <label>كود الطبيب</label> <!-- ✅ الحقل الجديد -->
+  <input type="text" name="doctor_code" required placeholder="مثال: DOC-00001">
 
-      <label>سبب الإحالة</label>
-      <textarea name="referral_reason" rows="3" required></textarea>
+  <label>كود المجمع الطبي</label>
+  <input type="text" name="clinic_code" required>
 
-      <label>ملاحظات إضافية</label>
-      <textarea name="notes" rows="3"></textarea>
+  <label>سبب الإحالة</label>
+  <textarea name="referral_reason" rows="3" required></textarea>
 
-      <label>إرفاق مستندات</label>
-      <input type="file" name="documents" accept="image/*,.pdf,.doc,.docx" multiple>
+  <label>ملاحظات إضافية</label>
+  <textarea name="notes" rows="3"></textarea>
 
-      <button type="submit">إرسال الإحالة</button>
-    </form>
+  <label>إرفاق مستندات</label>
+  <input type="file" name="documents" accept="image/*,.pdf,.doc,.docx" multiple>
 
-    <div class="success-message" id="successMessage" style="display:none; margin-top: 20px; background-color: #e7f9e7; padding: 15px; border-radius: 8px;">
-      ✅ تم الإرسال بنجاح!
-      <div id="fileLinks" style="margin-top:10px;"></div>
-    </div>
-  </div>
+  <button type="submit">إرسال الإحالة</button>
 
-  <!-- ربط مكتبة Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <!-- ربط كود الإرسال -->
-  <script src="index.js"></script>
-</body>
-</html>
+</form>
