@@ -6,7 +6,7 @@ const client = window.supabase.createClient(
 
 // رفع ملف إلى Bucket مع دعم Cache و Upsert
 async function uploadFile(file) {
-  const filePath = `${Date.now()}-${file.name}`;
+  const filePath = `uploads/${Date.now()}-${file.name}`; // أضف uploads/ هنا
 
   const { data, error } = await client
     .storage
