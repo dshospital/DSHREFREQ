@@ -11,6 +11,9 @@
     <h2>إدارة أكواد الأطباء - مستشفى دار الشفاء</h2>
 
     <form id="doctorForm">
+      <label>اسم الطبيب</label>
+      <input type="text" name="doctor_name" required placeholder="مثال: د. محمد العتيبي">
+
       <label>كود الطبيب</label>
       <input type="text" name="doctor_code" required placeholder="مثال: DOC-00001">
 
@@ -18,7 +21,7 @@
       <input type="text" name="clinic_code" required>
 
       <label>التخصص</label>
-      <input type="text" name="specialty" required placeholder="مثال: طب عظام">
+      <input type="text" name="specialty" required placeholder="مثال: طب أطفال">
 
       <button type="submit">إضافة طبيب</button>
     </form>
