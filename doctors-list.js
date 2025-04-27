@@ -4,7 +4,7 @@ const client = window.supabase.createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloaXp4eWFmc2R2eGl2a3lxdWV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2NTcxMDMsImV4cCI6MjA2MTIzMzEwM30.BFtLt4I6JnRzAmHf5reEaDL1h-f-nMBIsSQUfC5M5Zo'
 );
 
-// تحميل الأطباء
+// تحميل قائمة الأطباء
 async function loadDoctors() {
   const { data: doctors, error } = await client
     .from('doctors')
@@ -23,6 +23,7 @@ async function loadDoctors() {
     const tr = document.createElement('tr');
 
     tr.innerHTML = `
+      <td>${doctor.doctor_name || '-'}</td>
       <td>${doctor.doctor_code}</td>
       <td>${doctor.clinic_code}</td>
       <td>${doctor.specialty || '-'}</td>
@@ -33,5 +34,5 @@ async function loadDoctors() {
   });
 }
 
-// تحميل القائمة عند فتح الصفحة
+// تحميل عند فتح الصفحة
 document.addEventListener('DOMContentLoaded', loadDoctors);
