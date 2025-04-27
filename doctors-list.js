@@ -1,3 +1,9 @@
+// ربط Supabase
+const client = window.supabase.createClient(
+  'https://ihizxyafsdvxivkyquev.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloaXp4eWFmc2R2eGl2a3lxdWV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2NTcxMDMsImV4cCI6MjA2MTIzMzEwM30.BFtLt4I6JnRzAmHf5reEaDL1h-f-nMBIsSQUfC5M5Zo'
+);
+
 // تحميل قائمة الأطباء
 async function loadDoctors() {
   const { data: doctors, error } = await client
@@ -17,13 +23,17 @@ async function loadDoctors() {
     const tr = document.createElement('tr');
 
     tr.innerHTML = `
-      <td>${doctor.doctor_name || '-'}</td>    <!-- هنا تصحيح -->
+      <td>${doctor.doctor_name || '-'}</td>
       <td>${doctor.doctor_code}</td>
-      <td>${doctor.clinic_code}</td>
       <td>${doctor.specialty || '-'}</td>
-      <td>${new Date(doctor.created_at).toLocaleString()}</td>
+      <td>${doctor.clinic_code || '-'}</td>
+      <td>${new Date(doctor.created_at).toLocaleString('ar-EG')}</td>
+      <td>${doctor.status === 'active' ? '✅ نشط' : '❌ غير نشط'}</td>
     `;
 
     tableBody.appendChild(tr);
   });
 }
+
+// تحميل عند فتح الصفحة
+document.addEventListener('DOMContentLoaded', loadDoctors);
