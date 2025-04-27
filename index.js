@@ -1,12 +1,11 @@
-// ربط مع مشروع Supabase
+// ربط Supabase
 const client = window.supabase.createClient(
   'https://ihizxyafsdvxivkyquev.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwc3hka2R1dHhwc3J5YXdtc3lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2NTA3ODMsImV4cCI6MjA2MTIyNjc4M30.jutNA8Zo0RxzpBWEXQm5-OPraFNtWFKZe6yZ__d_2Ts'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloaXp4eWFmc2R2eGl2a3lxdWV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2NTcxMDMsImV4cCI6MjA2MTIzMzEwM30.BFtLt4I6JnRzAmHf5reEaDL1h-f-nMBIsSQUfC5M5Zo'
 );
 
-// رفع ملف إلى Bucket مع دعم Cache و Upsert
+// رفع الملفات إلى البوكت
 async function uploadFile(file) {
-  // تنظيف اسم الملف
   const cleanFileName = file.name.replace(/\s+/g, '-').replace(/[^\w.-]/g, '');
   const filePath = `uploads/${Date.now()}-${cleanFileName}`;
 
@@ -31,19 +30,20 @@ async function uploadFile(file) {
   return publicUrl;
 }
 
-// توليد كود طبيب تلقائي
+// توليد كود الطبيب تلقائياً
 async function generateDoctorCode() {
   const { data, error } = await client
     .from('doctors')
-    .select('id');
+    .select('id', { count: 'exact' });
 
   if (error) throw error;
 
-  const nextNumber = 1000 + (data?.length || 0) + 1;
-  return `DOC-${nextNumber}`;
+  const nextNumber = (data.length || 0) + 1;
+  const paddedNumber = String(nextNumber).padStart(5, '0');
+  return `DOC-${paddedNumber}`;
 }
 
-// معالجة إرسال النموذج
+// إرسال النموذج
 document.getElementById('referralForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const form = this;
@@ -51,7 +51,6 @@ document.getElementById('referralForm').addEventListener('submit', async functio
   let uploadedFiles = [];
 
   try {
-    // رفع الملفات
     if (fileInput.files.length > 0) {
       for (const file of fileInput.files) {
         const url = await uploadFile(file);
@@ -59,17 +58,17 @@ document.getElementById('referralForm').addEventListener('submit', async functio
       }
     }
 
-    // توليد كود الطبيب
     const doctorCode = await generateDoctorCode();
 
-    // إضافة بيانات المريض
+    // حفظ بيانات المريض
     const { data: patientData, error: patientError } = await client
       .from('patients')
       .insert([
         {
-          patient_name: form.patient_name.value,
-          patient_phone: form.patient_phone.value,
-          patient_id_number: form.patient_id_number.value
+          full_name: form.patient_name.value,
+          national_id: form.patient_id.value,
+          phone_number: form.patient_phone.value,
+          gender: form.gender.value
         }
       ])
       .select()
@@ -78,14 +77,12 @@ document.getElementById('referralForm').addEventListener('submit', async functio
     if (patientError) throw patientError;
     const patient_id = patientData.id;
 
-    // إضافة بيانات الطبيب
+    // حفظ بيانات الطبيب
     const { data: doctorData, error: doctorError } = await client
       .from('doctors')
       .insert([
         {
           doctor_code: doctorCode,
-          doctor_name: form.doctor_name.value,
-          specialty: form.specialty.value,
           clinic_code: form.clinic_code.value
         }
       ])
@@ -95,7 +92,7 @@ document.getElementById('referralForm').addEventListener('submit', async functio
     if (doctorError) throw doctorError;
     const doctor_id = doctorData.id;
 
-    // إضافة بيانات الإحالة
+    // حفظ بيانات الإحالة
     const { data: referralData, error: referralError } = await client
       .from('referrals')
       .insert([
@@ -112,7 +109,7 @@ document.getElementById('referralForm').addEventListener('submit', async functio
     if (referralError) throw referralError;
     const referral_id = referralData.id;
 
-    // إضافة روابط الملفات
+    // حفظ روابط الملفات
     for (const url of uploadedFiles) {
       await client
         .from('files')
@@ -124,7 +121,6 @@ document.getElementById('referralForm').addEventListener('submit', async functio
         ]);
     }
 
-    // نجاح الإرسال
     form.reset();
     document.getElementById('successMessage').style.display = 'block';
     document.getElementById('fileLinks').innerHTML = uploadedFiles.map(link => `<a href="${link}" target="_blank">📎 ملف مرفق</a>`).join('<br>');
