@@ -7,25 +7,25 @@ const client = window.supabase.createClient(
 // رفع الملفات إلى البوكت
 async function uploadFile(file) {
   const cleanFileName = file.name.replace(/\s+/g, '-').replace(/[^\w.-]/g, '');
-  const filePath = `${Date.now()}-${cleanFileName}`;
+  const filePath = `uploads/${Date.now()}-${cleanFileName}`;
 
   const { data, error } = await client
     .storage
     .from('referral-documents')
     .upload(filePath, file, {
       cacheControl: '3600',
-      upsert: true
+      upsert: false // ملاحظة: لا تسمح بالاستبدال (يمكن تغييره إلى true لو أردت)
     });
 
   if (error) {
     console.error('❌ خطأ أثناء رفع الملف:', error);
-    throw new Error('❌ فشل رفع الملف');
+    throw new Error(error.message || '❌ فشل رفع الملف');
   }
 
-  const publicUrl = client
+  const { publicUrl } = client
     .storage
     .from('referral-documents')
-    .getPublicUrl(filePath).data.publicUrl;
+    .getPublicUrl(filePath).data;
 
   return publicUrl;
 }
