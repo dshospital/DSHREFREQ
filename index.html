@@ -2,60 +2,55 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بوابة تسجيل الإحالات - مستشفى دار الشفاء</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>بوابة الإحالات - مستشفى دار الشفاء</title>
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
-<div class="container">
-  <h2>بوابة تسجيل الإحالات - مستشفى دار الشفاء</h2>
+  <div class="container">
+    <h2>نموذج إحالة مريض - مستشفى دار الشفاء</h2>
 
-  <form id="referralForm">
-    <h3>بيانات المريض</h3>
+    <form id="referralForm">
+      <label>اسم المريض</label>
+      <input type="text" name="patient_name" required>
 
-    <label>اسم المريض</label>
-    <input type="text" name="patient_name" required>
+      <label>رقم الهوية</label>
+      <input type="text" name="patient_id" required>
 
-    <label>رقم جوال المريض</label>
-    <input type="tel" name="patient_phone" required>
+      <label>رقم الجوال</label>
+      <input type="tel" name="patient_phone" required>
 
-    <label>رقم هوية المريض</label>
-    <input type="text" name="patient_id_number" required>
+      <label>النوع</label>
+      <select name="gender" required>
+        <option value="">اختر النوع</option>
+        <option value="ذكر">ذكر</option>
+        <option value="أنثى">أنثى</option>
+      </select>
 
-    <h3>بيانات الطبيب والمجمع الطبي</h3>
+      <label>كود المجمع الطبي</label>
+      <input type="text" name="clinic_code" required>
 
-    <label>اسم الطبيب</label>
-    <input type="text" name="doctor_name" required>
+      <label>سبب الإحالة</label>
+      <textarea name="referral_reason" rows="3" required></textarea>
 
-    <label>التخصص</label>
-    <input type="text" name="specialty" required>
+      <label>ملاحظات إضافية</label>
+      <textarea name="notes" rows="3"></textarea>
 
-    <label>كود المجمع الطبي</label>
-    <input type="text" name="clinic_code" required>
+      <label>إرفاق مستندات</label>
+      <input type="file" name="documents" accept="image/*,.pdf,.doc,.docx" multiple>
 
-    <h3>تفاصيل التحويل</h3>
+      <button type="submit">إرسال الإحالة</button>
+    </form>
 
-    <label>سبب التحويل</label>
-    <textarea name="referral_reason" rows="3" required></textarea>
-
-    <label>ملاحظات إضافية</label>
-    <textarea name="notes" rows="3"></textarea>
-
-    <h3>رفع وثائق</h3>
-
-    <input type="file" name="documents" multiple accept="image/*,.pdf,.doc,.docx">
-
-    <button type="submit">إرسال الإحالة</button>
-  </form>
-
-  <div id="successMessage" style="display:none; margin-top:20px; background:#e0ffe0; padding:10px; border-radius:8px;">
-    ✅ تم إرسال الإحالة بنجاح!
-    <div id="fileLinks"></div>
+    <div class="success-message" id="successMessage" style="display:none; margin-top: 20px; background-color: #e7f9e7; padding: 15px; border-radius: 8px;">
+      ✅ تم الإرسال بنجاح!
+      <div id="fileLinks" style="margin-top:10px;"></div>
+    </div>
   </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="index.js"></script>
 
-
+  <!-- ربط مكتبة Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <!-- ربط كود الإرسال -->
+  <script src="index.js"></script>
 </body>
 </html>
