@@ -7,7 +7,7 @@ const client = window.supabase.createClient(
 // رفع الملفات إلى البوكت
 async function uploadFile(file) {
   const cleanFileName = file.name.replace(/\s+/g, '-').replace(/[^\w.-]/g, '');
-  const filePath = `uploads/${Date.now()}-${cleanFileName}`;
+  const filePath = `${Date.now()}-${cleanFileName}`;
 
   const { data, error } = await client
     .storage
