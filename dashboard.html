@@ -2,20 +2,25 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>بوابة الإحالات - مستشفى دار الشفاء</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة الإحالات - مستشفى دار الشفاء</title>
   <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
+
   <div class="container">
-    <h2>بوابة الإحالات - مستشفى دار الشفاء</h2>
-<div class="filters">
-  <input type="text" id="searchDoctorCode" placeholder="بحث بكود الطبيب">
-  <input type="text" id="searchNationalId" placeholder="بحث برقم الهوية">
-  <input type="date" id="searchDate">
-  <button id="exportExcel">📄 استخراج تقرير Excel</button>
-</div>
-    <table id="referralTable">
+    <h2>لوحة الإحالات</h2>
+
+    <div class="filters">
+      <input type="text" id="searchDoctorCode" placeholder="بحث بكود الطبيب">
+      <input type="text" id="searchNationalId" placeholder="بحث برقم الهوية">
+      <input type="date" id="searchDate">
+      <button id="exportExcel">📄 استخراج تقرير Excel</button>
+    </div>
+
+    <table id="referralsTable">
       <thead>
         <tr>
           <th>اسم المريض</th>
@@ -23,22 +28,21 @@
           <th>رقم الجوال</th>
           <th>النوع</th>
           <th>كود الطبيب</th>
+          <th>التخصص</th>
           <th>كود المجمع الطبي</th>
           <th>سبب الإحالة</th>
           <th>ملاحظات</th>
-          <th>الملفات المرفقة</th>
           <th>تاريخ الإرسال</th>
+          <th>رابط الوثائق</th>
         </tr>
       </thead>
-      <tbody id="referralTableBody">
-        <!-- يتم تعبئة البيانات من dashboard.js -->
+      <tbody id="referralsTableBody">
       </tbody>
     </table>
+
   </div>
 
-  <!-- ربط Supabase JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <!-- ربط كود جلب البيانات -->
   <script src="dashboard.js"></script>
+
 </body>
 </html>
