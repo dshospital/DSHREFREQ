@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم الأدمن - مستشفى دار الشفاء</title>
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+
+  <div class="admin-container">
+    <img src="logo.png" alt="شعار المستشفى" class="logo">
+
+    <h1>بوابة التحويل الرقمي - لوحة الإدارة</h1>
+
+    <div class="admin-buttons">
+      <button onclick="location.href='index.html'">➕ إنشاء إحالة جديدة</button>
+      <button onclick="location.href='manage-doctors.html'">🧑‍⚕️ إدارة الأطباء</button>
+      <button onclick="location.href='dashboard.html'">📊 الدخول إلى الداشبورد</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <h3>📋 عدد الإحالات</h3>
+        <p id="referralsCount">--</p>
+      </div>
+      <div class="stat-card">
+        <h3>🧑‍⚕️ عدد الأطباء</h3>
+        <p id="doctorsCount">--</p>
+      </div>
+      <div class="stat-card">
+        <h3>🏥 عدد المجمعات الطبية</h3>
+        <p id="clinicsCount">--</p>
+      </div>
+      <div class="stat-card">
+        <h3>🧑‍🦲 عدد المرضى</h3>
+        <p id="patientsCount">--</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
