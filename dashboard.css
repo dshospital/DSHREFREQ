@@ -1,6 +1,6 @@
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #f8fafc;
+  background-color: #f8f9fa;
   margin: 0;
   padding: 20px;
 }
@@ -8,10 +8,6 @@ body {
 .container {
   max-width: 1200px;
   margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 h2 {
@@ -20,45 +16,50 @@ h2 {
   margin-bottom: 20px;
 }
 
-#referralTable {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+.filters {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
-#referralTable th, #referralTable td {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  text-align: center;
-  font-size: 0.95rem;
+.filters input, .filters button {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
-#referralTable th {
+#exportExcel {
   background-color: #007b8f;
   color: white;
+  cursor: pointer;
 }
 
-#referralTable tr:nth-child(even) {
-  background-color: #f2f2f2;
+#exportExcel:hover {
+  background-color: #005f6a;
 }
 
-#referralTable a {
-  color: #007b8f;
-  text-decoration: none;
-  font-size: 1.2rem;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: white;
 }
 
-#referralTable a:hover {
-  text-decoration: underline;
+thead th {
+  background-color: #007b8f;
+  color: white;
+  padding: 10px;
 }
 
-@media (max-width: 768px) {
-  #referralTable th, #referralTable td {
-    font-size: 0.85rem;
-    padding: 8px;
-  }
+tbody td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
 
-  .container {
-    padding: 10px;
-  }
+tbody tr:nth-child(odd) {
+  background-color: #f1f1f1;
 }
